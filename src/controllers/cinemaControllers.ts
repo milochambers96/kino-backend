@@ -12,7 +12,7 @@ export const getAllCinemas = async (req: Request, res: Response) => {
       "The following error occured when the requestor tried to get all cinemas:",
       error
     );
-    res.status(500).send({
+    res.status(500).json({
       message: "Unable to locate any cinemas, please try searching again",
     });
   }
@@ -32,9 +32,70 @@ export const getACinema = async (req: Request, res: Response) => {
       "The following error occured when the requestor tried to access a specifc cinema:",
       error
     );
-    res.status(449).send({
+    res.status(449).json({
       message:
         "Unable to locate the requested cinema. Please try again with a valid cinema ID.",
+    });
+  }
+};
+
+export const postACinema = async (req: Request, res: Response) => {
+  try {
+    const newCinemaDetails = req.body;
+    const newCinema = await Cinema.create(newCinemaDetails);
+    const newCinemaName = newCinema.name;
+    res.status(201).send(newCinema);
+    console.log(`The requestor added ${newCinemaName} to Kino's cinema DB.`);
+  } catch (error) {
+    console.error(
+      "The following error occured when the requestor tried to add a cinema to Kino's DB:",
+      error
+    );
+    res.status(400).json({
+      message: "Error posting cinema. Please reivew submitted details.",
+    });
+  }
+};
+
+export const removeACinema = async (req: Request, res: Response) => {
+  try {
+    const targetCinemaId = req.params.cinemaId;
+    const removedCinema = await Cinema.findByIdAndDelete(targetCinemaId);
+    res
+      .status(200)
+      .json({ message: "The following cinema was removed:", removedCinema });
+    console.log(`${removedCinema?.name} has been removed from Kino's DB`);
+  } catch (error) {
+    console.error(
+      "The following error occured when the requestor tried to remove a cinema from Kino's DB:",
+      error
+    );
+    res.status(500).json({
+      message: "An error occured when attempting to remove a cinema.",
+    });
+  }
+};
+
+export const updateACinema = async (req: Request, res: Response) => {
+  try {
+    const targetCinemaId = req.params.cinemaId;
+    const updatedInfo = req.body;
+    const updatedCinema = await Cinema.findByIdAndUpdate(
+      targetCinemaId,
+      updatedInfo,
+      { new: true }
+    );
+    res
+      .status(200)
+      .json({ message: "Cinema updated successfully", updatedCinema });
+    console.log(`The requestor updated ${updatedCinema?.name} details.`);
+  } catch (error) {
+    console.error(
+      "The following error occured when the requestor tried to update a cinema in Kino's DB:",
+      error
+    );
+    res.status(500).json({
+      message: "An error occured when attempting to update a cinema.",
     });
   }
 };

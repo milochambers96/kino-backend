@@ -27,7 +27,7 @@ const cinemaSchema: Schema<ICinema> = new Schema({
   yearEst: { type: Number },
   screens: { type: Number },
   capacity: { type: Number },
-  owner: { type: Schema.Types.ObjectId, ref: "User", required: true },
+  owner: { type: Schema.Types.ObjectId, ref: "User" },
 });
 
 const Cinema = model<ICinema>("Cinema", cinemaSchema);

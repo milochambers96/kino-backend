@@ -11,7 +11,7 @@ export const signup = async (req: Request, res: Response) => {
     console.log(username, " has been added to the User DB.");
   } catch (error) {
     console.error(error);
-    res.status(400).send({
+    res.status(400).json({
       message: "Error signing up user. Please reivew submitted details.",
     });
   }
