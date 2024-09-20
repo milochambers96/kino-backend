@@ -7,19 +7,20 @@ import {
   removeACinema,
   updateACinema,
 } from "../controllers/cinemaControllers";
+import secureRoute from "../middleware/secureRoute";
 
 export const router = express.Router();
 
 router.route("/signup").post(signup);
 router.route("/login").post(login);
 
-router.route("/cinemas").get(getAllCinemas).post(postACinema);
+router.route("/cinemas").get(getAllCinemas).post(secureRoute, postACinema);
 
 router
   .route("/cinemas/:cinemaId")
   .get(getACinema)
-  .delete(removeACinema)
-  .put(updateACinema);
+  .delete(secureRoute, removeACinema)
+  .put(secureRoute, updateACinema);
 
 router.route("/cinemas/:cinemaId/events");
 
