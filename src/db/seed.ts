@@ -25,7 +25,7 @@ async function seed() {
 
   const RioCinema = {
     name: "Rio Cinema",
-    bio: "The Rio is a genuine 1930's art deco picture palace in Dalston Hackney. The Rio is run as a non-proift charity, and London's longest operating communicty cinema.",
+    bio: "The Rio is a genuine 1930's art deco picture palace in Dalston Hackney. The Rio is run as a non-proift charity, and London's longest operating community cinema.",
     address: "107 Kingsland High Street, London, E8 2PB",
     area: "East",
     image:

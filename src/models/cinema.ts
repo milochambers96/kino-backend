@@ -14,7 +14,7 @@ interface ICinema {
 }
 
 const cinemaSchema: Schema<ICinema> = new Schema({
-  name: { type: String, required: true },
+  name: { type: String, required: true, unique: true },
   bio: { type: String, required: true },
   address: { type: String, required: true },
   area: {
@@ -27,7 +27,7 @@ const cinemaSchema: Schema<ICinema> = new Schema({
   yearEst: { type: Number },
   screens: { type: Number },
   capacity: { type: Number },
-  owner: { type: Schema.Types.ObjectId, ref: "User" },
+  owner: { type: Schema.Types.ObjectId, ref: "User", required: true },
 });
 
 const Cinema = model<ICinema>("Cinema", cinemaSchema);
