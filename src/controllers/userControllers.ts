@@ -7,10 +7,8 @@ export const signup = async (req: Request, res: Response) => {
     const newUserDetails = req.body;
     const username = newUserDetails.username;
     const newUser = await User.create(newUserDetails);
-    res.status(201).send({
-      message: `Hi ${username}, welcome to Kino Connect`,
-    });
-    console.log("The following user has been added to the User DB:", newUser);
+    res.status(201).send(newUser);
+    console.log(username, " has been added to the User DB.");
   } catch (error) {
     console.error(error);
     res.status(400).send({
