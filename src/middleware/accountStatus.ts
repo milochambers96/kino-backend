@@ -13,7 +13,7 @@ export const cinemaUserCheck = (
   if (req.currentUser.role !== "Cinema") {
     return res.status(403).json({
       message:
-        "Access denied. Only cinema account holders can post  a new Cinema to Kino Connection.",
+        "Access denied. Only cinema account holders can post a new Cinema to Kino Connection.",
     });
   }
   next();

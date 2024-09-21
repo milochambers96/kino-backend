@@ -59,11 +59,11 @@ export const login = async (req: Request, res: Response) => {
         token
       );
       return res.status(200).json({
-        message: `Login successful, welcome back ${foundUser.username}`,
+        message: `Login successful. Hi ${foundUser.username}, welcome back to Kino Connect.`,
       });
     } else {
       console.log(
-        "Login failed - the requestor provided an incorrect password"
+        "Login failed - the requestor provided an incorrect password."
       );
       return res.status(401).json({
         message: loginFailedMessage,
