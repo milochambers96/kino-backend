@@ -41,9 +41,11 @@ export const getACinema = async (req: Request, res: Response) => {
 
 export const postACinema = async (req: Request, res: Response) => {
   try {
+    req.body.owner = req.currentUser._id;
     const newCinemaDetails = req.body;
+
     const newCinema = await Cinema.create(newCinemaDetails);
-    const newCinemaName = newCinema.name;
+    const newCinemaName = newCinema?.name;
     res.status(201).send(newCinema);
     console.log(`The requestor added ${newCinemaName} to Kino's cinema DB.`);
   } catch (error) {
@@ -60,11 +62,20 @@ export const postACinema = async (req: Request, res: Response) => {
 export const removeACinema = async (req: Request, res: Response) => {
   try {
     const targetCinemaId = req.params.cinemaId;
-    const removedCinema = await Cinema.findByIdAndDelete(targetCinemaId);
-    res
-      .status(200)
-      .json({ message: "The following cinema was removed:", removedCinema });
-    console.log(`${removedCinema?.name} has been removed from Kino's DB`);
+    const targetCinema = await Cinema.findById(targetCinemaId);
+    const targetCinemaOwner = targetCinema?.owner;
+    if (req.currentUser._id.equals(targetCinemaOwner)) {
+      const removedCinema = await Cinema.findByIdAndDelete(targetCinemaId);
+      res
+        .status(200)
+        .json({ message: "The following cinema was removed:", removedCinema });
+      console.log(`${removedCinema?.name} has been removed from Kino's DB`);
+    } else {
+      res.status(403).json({
+        message:
+          "Unauthorised request. Only the cinema owner can remove it from Kino Connection.",
+      });
+    }
   } catch (error) {
     console.error(
       "The following error occured when the requestor tried to remove a cinema from Kino's DB:",
@@ -79,16 +90,25 @@ export const removeACinema = async (req: Request, res: Response) => {
 export const updateACinema = async (req: Request, res: Response) => {
   try {
     const targetCinemaId = req.params.cinemaId;
-    const updatedInfo = req.body;
-    const updatedCinema = await Cinema.findByIdAndUpdate(
-      targetCinemaId,
-      updatedInfo,
-      { new: true }
-    );
-    res
-      .status(200)
-      .json({ message: "Cinema updated successfully", updatedCinema });
-    console.log(`The requestor updated ${updatedCinema?.name} details.`);
+    const targetCinema = await Cinema.findById(targetCinemaId);
+    const targetCinemaOwner = targetCinema?.owner;
+    if (req.currentUser._id.equals(targetCinemaOwner)) {
+      const updatedInfo = req.body;
+      const updatedCinema = await Cinema.findByIdAndUpdate(
+        targetCinemaId,
+        updatedInfo,
+        { new: true }
+      );
+      res
+        .status(200)
+        .json({ message: "Cinema updated successfully", updatedCinema });
+      console.log(`The requestor updated ${updatedCinema?.name} details.`);
+    } else {
+      res.status(403).json({
+        message:
+          "Unauthorised request. Only the cinema owner can update its details.",
+      });
+    }
   } catch (error) {
     console.error(
       "The following error occured when the requestor tried to update a cinema in Kino's DB:",
