@@ -5,8 +5,8 @@ interface IEvent {
   location: Types.ObjectId;
   image: string;
   description: string;
-  recDate: string;
-  setDate: Date;
+  specificDate: Date;
+  recurringDate: string;
   eventLink: string;
   user: Types.ObjectId;
   //   comments: []
@@ -17,8 +17,8 @@ const eventSchema: Schema<IEvent> = new Schema({
   location: { type: Schema.Types.ObjectId, ref: "Cinema", required: true },
   image: { type: String },
   description: { type: String, required: true },
-  recDate: { type: String },
-  setDate: { Type: Date },
+  specificDate: { type: Date },
+  recurringDate: { type: String },
   eventLink: { type: String },
   user: { type: Schema.Types.ObjectId, ref: "User", required: true },
   //   comments: {type: Array }

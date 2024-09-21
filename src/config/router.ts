@@ -7,6 +7,10 @@ import {
   removeACinema,
   updateACinema,
 } from "../controllers/cinemaControllers";
+import {
+  getEventsForACinema,
+  postAnEvent,
+} from "../controllers/eventsController";
 import secureRoute from "../middleware/secureRoute";
 
 export const router = express.Router();
@@ -22,6 +26,9 @@ router
   .delete(secureRoute, removeACinema)
   .put(secureRoute, updateACinema);
 
-router.route("/cinemas/:cinemaId/events");
+router
+  .route("/cinemas/:cinemaId/events")
+  .get(getEventsForACinema)
+  .post(postAnEvent);
 
 router.route("/cinemas/:cinemaId/events/:events");

@@ -13,7 +13,7 @@ export const getAllCinemas = async (req: Request, res: Response) => {
       error
     );
     res.status(500).json({
-      message: "Unable to locate any cinemas, please try searching again",
+      message: "Unable to locate any cinemas, please try again.",
     });
   }
 };
