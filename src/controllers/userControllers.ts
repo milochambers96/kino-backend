@@ -31,7 +31,7 @@ export const login = async (req: Request, res: Response) => {
   try {
     const incomingEmail = req.body.email;
     const incomingPassword = req.body.password;
-    const foundUser = await User.findOne(incomingEmail._id);
+    const foundUser = await User.findOne({ email: incomingEmail });
     const loginFailedMessage =
       "Login failed. Please check your credentials and try again!";
     if (!foundUser) {

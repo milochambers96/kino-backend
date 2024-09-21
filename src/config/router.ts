@@ -14,13 +14,17 @@ import {
   updateAnEvent,
 } from "../controllers/eventsController";
 import secureRoute from "../middleware/secureRoute";
+import { cinemaUserCheck } from "../middleware/accountStatus";
 
 export const router = express.Router();
 
 router.route("/signup").post(signup);
 router.route("/login").post(login);
 
-router.route("/cinemas").get(getAllCinemas).post(secureRoute, postACinema);
+router
+  .route("/cinemas")
+  .get(getAllCinemas)
+  .post(secureRoute, cinemaUserCheck, postACinema);
 
 router
   .route("/cinemas/:cinemaId")
@@ -31,9 +35,9 @@ router
 router
   .route("/cinemas/:cinemaId/events")
   .get(getEventsForACinema)
-  .post(postAnEvent);
+  .post(secureRoute, postAnEvent);
 
 router
   .route("/cinemas/:cinemaId/events/:eventId")
-  .delete(deleteAnEvent)
-  .put(updateAnEvent);
+  .delete(secureRoute, deleteAnEvent)
+  .put(secureRoute, updateAnEvent);
