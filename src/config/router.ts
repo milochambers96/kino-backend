@@ -8,8 +8,10 @@ import {
   updateACinema,
 } from "../controllers/cinemaControllers";
 import {
+  deleteAnEvent,
   getEventsForACinema,
   postAnEvent,
+  updateAnEvent,
 } from "../controllers/eventsController";
 import secureRoute from "../middleware/secureRoute";
 
@@ -31,4 +33,7 @@ router
   .get(getEventsForACinema)
   .post(postAnEvent);
 
-router.route("/cinemas/:cinemaId/events/:events");
+router
+  .route("/cinemas/:cinemaId/events/:eventId")
+  .delete(deleteAnEvent)
+  .put(updateAnEvent);

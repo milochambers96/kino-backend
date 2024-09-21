@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import mongoose from "mongoose";
 import Cinema from "../models/cinema";
 import Event from "../models/events";
-import { populate } from "dotenv";
 
 export const getEventsForACinema = async (req: Request, res: Response) => {
   try {
@@ -62,6 +61,54 @@ export const postAnEvent = async (req: Request, res: Response) => {
     );
     res.status(500).json({
       message: "Unable to create event, please try again.",
+    });
+  }
+};
+
+export const deleteAnEvent = async (req: Request, res: Response) => {
+  try {
+    const cinemaId = req.params.cinemaId;
+    const targetEventId = req.params.eventId;
+    const removedEvent = await Event.findByIdAndDelete(targetEventId);
+    res.status(200).json({
+      message: "The following event was removed from Kino's DB",
+      removedEvent,
+    });
+    console.log(`${removedEvent?.title} was remvoed from DB`);
+  } catch (error) {
+    console.error(
+      "The following error occured when the requestor tried to delete an event from Kino's DB:",
+      error
+    );
+    res.status(500).json({
+      message:
+        "An error occured when attempting to delete the requested event.",
+    });
+  }
+};
+
+export const updateAnEvent = async (req: Request, res: Response) => {
+  try {
+    const targetEventId = req.params.eventId;
+    const updatedInfo = req.body;
+    const updatedEvent = await Event.findByIdAndUpdate(
+      targetEventId,
+      updatedInfo,
+      { new: true }
+    );
+    res.status(200).json({
+      message: `${updatedEvent?.title} was successfully updated`,
+      event: updatedEvent,
+    });
+    console.log(`The requestor updated ${updatedEvent?.title}'s details.`);
+  } catch (error) {
+    console.error(
+      "The following error occured when the requestor tried to update an event in Kino's DB:",
+      error
+    );
+    res.status(500).json({
+      message:
+        "An error occured when attempting to update the requested event.",
     });
   }
 };
