@@ -18,6 +18,12 @@ import {
   cinemaUserCheck,
   eventOwnerOrHostCheck,
 } from "../middleware/accountStatus";
+import {
+  deleteAComment,
+  getCommentsForEvent,
+  postAComment,
+  updateAComment,
+} from "../controllers/commentController";
 
 export const router = express.Router();
 
@@ -45,3 +51,13 @@ router
   .route("/cinemas/:cinemaId/events/:eventId")
   .delete(secureRoute, eventOwnerOrHostCheck, deleteAnEvent)
   .put(secureRoute, updateAnEvent);
+
+router
+  .route("event/:eventId/comments")
+  .get(getCommentsForEvent)
+  .post(secureRoute, postAComment);
+
+router
+  .route("event/:eventId/comments")
+  .delete(secureRoute, deleteAComment)
+  .put(secureRoute, updateAComment);

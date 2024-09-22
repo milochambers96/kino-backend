@@ -2,8 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import User from "../models/user";
 import Cinema from "../models/cinema";
 import Event from "../models/events";
-
-import mongoose from "mongoose";
+import Comment from "../models/comments";
 
 export const cinemaUserCheck = (
   req: Request,
@@ -46,6 +45,36 @@ export const eventOwnerOrHostCheck = async (
     return res.status(403).json({
       message:
         "Access denied. Only an event author or host can delete the content.",
+    });
+  }
+};
+
+export const commentPermission = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const associatedEventId = req.params.eventId;
+  const associatedEvent = await Event.findById(associatedEventId);
+  const associatedEventAuthor = associatedEvent?.author._id;
+
+  const targetCommentId = req.params.commentId;
+  const targetComment = await Comment.findById(targetCommentId);
+
+  if (!targetComment) {
+    return res.status(404).json({ message: "Comment not found." });
+  }
+  const targetCommentAuthor = targetComment?.author._id;
+
+  if (
+    req.currentUser._id.equals(associatedEventAuthor) ||
+    req.currentUser._id.equals(targetCommentAuthor)
+  ) {
+    next();
+  } else {
+    return res.status(403).json({
+      message:
+        "Access denied. Only an event author or a comment author can remove the content.",
     });
   }
 };

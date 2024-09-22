@@ -74,7 +74,7 @@ export const deleteAnEvent = async (req: Request, res: Response) => {
       message: "The following event was removed from Kino's DB",
       removedEvent,
     });
-    console.log(`${removedEvent?.title} was remvoed from DB`);
+    console.log(`${removedEvent?.title} was removed from DB`);
   } catch (error) {
     console.error(
       "The following error occured when the requestor tried to delete an event from Kino's DB:",
@@ -82,7 +82,7 @@ export const deleteAnEvent = async (req: Request, res: Response) => {
     );
     res.status(500).json({
       message:
-        "An error occured when attempting to delete the requested event.",
+        "An error occured when attempting to delete the requested event. Please try again later.",
     });
   }
 };
