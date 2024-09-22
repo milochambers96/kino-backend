@@ -76,7 +76,19 @@ export const login = async (req: Request, res: Response) => {
     );
     return res.status(500).json({
       message:
-        "An error occured when attemptingto login the user. Please try again.",
+        "An error occured when attemptingto login the user. Please try again later.",
     });
   }
 };
+
+export async function getCurrentUser(req: Request, res: Response) {
+  console.log("res: ", req.currentUser);
+  try {
+    res.status(200).send(req.currentUser);
+  } catch (err) {
+    console.log(err);
+    res
+      .status(500)
+      .send({ message: "There was an error, please try again later." });
+  }
+}
