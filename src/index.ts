@@ -1,10 +1,12 @@
 import express from "express";
 import cors from "cors";
-import mongoose from "mongoose";
+import mongoSanitize from "express-mongo-sanitize";
 import { router } from "./config/router";
+import mongoose from "mongoose";
 
 const app = express();
 app.use(cors());
+app.use(mongoSanitize());
 app.use(express.json());
 app.use("/api", router);
 

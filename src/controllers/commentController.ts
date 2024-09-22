@@ -20,7 +20,7 @@ export const getCommentsForEvent = async (req: Request, res: Response) => {
     );
   } catch (error) {
     console.error(
-      `The following error occured when the requestor tried to find all the comments associated with ${obtainedEvent?.title}:`,
+      `The following error occured when the requestor tried to find an events comments:`,
       error
     );
     res.status(500).json({
