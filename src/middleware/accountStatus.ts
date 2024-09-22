@@ -30,13 +30,22 @@ export const eventOwnerOrHostCheck = async (
 
   const targetEventId = req.params.eventId;
   const targetEvent = await Event.findById(targetEventId);
-  const targetEventOwner = targetEvent?.user._id;
 
-  if (req.currentUser !== (hostCinemaOwner || targetEventOwner)) {
+  if (!targetEvent) {
+    return res.status(404).json({ message: "Event not found." });
+  }
+
+  const targetEventAuthor = targetEvent?.author._id;
+
+  if (
+    req.currentUser._id.equals(hostCinemaOwner) ||
+    req.currentUser._id.equals(targetEventAuthor)
+  ) {
+    next();
+  } else {
     return res.status(403).json({
       message:
-        "Access denied. Only an event author or an event host can alter an event.",
+        "Access denied. Only an event author or host can delete the content.",
     });
   }
-  next();
 };

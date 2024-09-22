@@ -14,7 +14,10 @@ import {
   updateAnEvent,
 } from "../controllers/eventsController";
 import secureRoute from "../middleware/secureRoute";
-import { cinemaUserCheck } from "../middleware/accountStatus";
+import {
+  cinemaUserCheck,
+  eventOwnerOrHostCheck,
+} from "../middleware/accountStatus";
 
 export const router = express.Router();
 
@@ -39,5 +42,5 @@ router
 
 router
   .route("/cinemas/:cinemaId/events/:eventId")
-  .delete(secureRoute, deleteAnEvent)
+  .delete(secureRoute, eventOwnerOrHostCheck, deleteAnEvent)
   .put(secureRoute, updateAnEvent);

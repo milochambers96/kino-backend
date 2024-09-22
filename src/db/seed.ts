@@ -49,7 +49,7 @@ async function seed() {
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQzQx9sN4751UUSDWZ-QTTL2RvVC8gNrawFEA&s",
     recDate: "Weekly, every thursday.",
     eventLink: "https://www.riocinema.org.uk/pink-palace",
-    user: seedUser,
+    author: seedUser,
   };
 
   const seedEvent = await Event.create(RioEvent);

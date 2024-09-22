@@ -8,10 +8,9 @@ export const getEventsForACinema = async (req: Request, res: Response) => {
     const requestedCinemaId = req.params.cinemaId;
     const obtainedCinema = await Cinema.findById(requestedCinemaId);
     const hostCinemaId = obtainedCinema?._id;
-    const cinemaEvents = await Event.find({ location: hostCinemaId }).populate(
-      "location",
-      "name address"
-    );
+    const cinemaEvents = await Event.find({ location: hostCinemaId })
+      .populate("location", "name address")
+      .populate("author", "username");
     res
       .status(200)
       .json({ hostCinema: obtainedCinema?.name, events: cinemaEvents });
@@ -36,6 +35,7 @@ export const postAnEvent = async (req: Request, res: Response) => {
     const obtainedCinema = await Cinema.findById(requestedCinemaId);
     const hostCinemaId = obtainedCinema?._id;
 
+    req.body.author = req.currentUser._id;
     const newEventDetails = req.body;
     const newEvent = await Event.create({
       ...newEventDetails,
@@ -90,17 +90,26 @@ export const deleteAnEvent = async (req: Request, res: Response) => {
 export const updateAnEvent = async (req: Request, res: Response) => {
   try {
     const targetEventId = req.params.eventId;
-    const updatedInfo = req.body;
-    const updatedEvent = await Event.findByIdAndUpdate(
-      targetEventId,
-      updatedInfo,
-      { new: true }
-    );
-    res.status(200).json({
-      message: `${updatedEvent?.title} was successfully updated`,
-      event: updatedEvent,
-    });
-    console.log(`The requestor updated ${updatedEvent?.title}'s details.`);
+    const targetEvent = await Event.findById(targetEventId);
+    const targetEventAuthor = targetEvent?.author;
+    if (req.currentUser._id.equals(targetEventAuthor)) {
+      const updatedInfo = req.body;
+      const updatedEvent = await Event.findByIdAndUpdate(
+        targetEventId,
+        updatedInfo,
+        { new: true }
+      );
+      res.status(200).json({
+        message: `${updatedEvent?.title} was successfully updated`,
+        event: updatedEvent,
+      });
+      console.log(`The requestor updated ${updatedEvent?.title}'s details.`);
+    } else {
+      res.status(403).json({
+        message:
+          "Unauthorised request. Only the event author can update its details.",
+      });
+    }
   } catch (error) {
     console.error(
       "The following error occured when the requestor tried to update an event in Kino's DB:",
