@@ -5,8 +5,13 @@ import Event from "../models/events";
 
 export const getCommentsForEvent = async (req: Request, res: Response) => {
   try {
-    const requestedEventId = req.params.commentId;
+    const requestedEventId = req.params.eventId;
     const obtainedEvent = await Event.findById(requestedEventId);
+
+    if (!obtainedEvent) {
+      return res.status(404).json({ message: "Event not found" });
+    }
+
     const associatedEventId = obtainedEvent?._id;
     const eventComments = await Comment.find({
       event: associatedEventId,

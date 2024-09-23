@@ -48,19 +48,19 @@ router
   .get(getEventsForACinema)
   .post(secureRoute, postAnEvent);
 
+router.route("/events/:eventId").get(getAnEvent);
+
 router
   .route("/cinemas/:cinemaId/events/:eventId")
   .delete(secureRoute, eventOwnerOrHostCheck, deleteAnEvent)
   .put(secureRoute, updateAnEvent);
 
 router
-  .route("event/:eventId/comments")
+  .route("/events/:eventId/comments")
   .get(getCommentsForEvent)
   .post(secureRoute, postAComment);
 
-router.route("event/:evnetId").get(getAnEvent);
-
 router
-  .route("event/:eventId/comments")
+  .route("/events/:eventId/comments")
   .delete(secureRoute, deleteAComment)
   .put(secureRoute, updateAComment);

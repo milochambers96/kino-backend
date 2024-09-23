@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import Cinema from "../models/cinema";
 import User from "../models/user";
 import Event from "../models/events";
+import Comment from "../models/comments";
 
 const kinoAdmin = {
   username: "KinoConnect",
@@ -19,12 +20,13 @@ async function seed() {
   await Cinema.deleteMany();
   await User.deleteMany();
   await Event.deleteMany();
+  await Comment.deleteMany();
 
   const seedUser = await User.create(kinoAdmin);
   console.log("The following user was added", seedUser);
 
   const RioCinema = {
-    name: "Rio Cinema",
+    name: "The Rio Cinema",
     bio: "The Rio is a genuine 1930's art deco picture palace in Dalston Hackney. The Rio is run as a non-proift charity, and London's longest operating community cinema.",
     address: "107 Kingsland High Street, London, E8 2PB",
     area: "East",
@@ -55,6 +57,14 @@ async function seed() {
   const seedEvent = await Event.create(RioEvent);
 
   console.log("New event added:", seedEvent);
+
+  const RioEventComment = {
+    content: "How much are tickets?",
+    event: seedEvent,
+    author: seedUser,
+  };
+
+  const seedComment = await Comment.create(RioEventComment);
 
   await mongoose.disconnect();
 }

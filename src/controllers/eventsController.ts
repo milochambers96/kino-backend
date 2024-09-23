@@ -31,16 +31,22 @@ export const getAnEvent = async (req: Request, res: Response) => {
   try {
     const requestedEventId = req.params.eventId;
     const obtainedEvent = await Event.findById(requestedEventId);
-    res.status(200).send(obtainedEvent);
-    console.log("Event sent to user.");
+
+    if (!obtainedEvent) {
+      return res.status(404).json({
+        message: "Event not found. Please try again with a valid event ID.",
+      });
+    }
+
+    res.status(200).json(obtainedEvent);
+    console.log("Event sent to user:", obtainedEvent);
   } catch (error) {
     console.error(
-      "The following error occured when the requestor tried to access a specifc event:",
+      "The following error occurred when the requestor tried to access a specific event:",
       error
     );
-    res.status(449).json({
-      message:
-        "Unable to locate the requested cinema. Please try again with a valid event ID.",
+    res.status(500).json({
+      message: "Unable to locate the requested event. Please try again later.",
     });
   }
 };
