@@ -11,9 +11,7 @@ export const getEventsForACinema = async (req: Request, res: Response) => {
     const cinemaEvents = await Event.find({ location: hostCinemaId })
       .populate("location", "name address")
       .populate("author", "username");
-    res
-      .status(200)
-      .json({ hostCinema: obtainedCinema?.name, events: cinemaEvents });
+    res.status(200).json({ cinemaEvents });
     console.log(
       `${obtainedCinema?.name} is hosting the following events:`,
       cinemaEvents
@@ -25,6 +23,24 @@ export const getEventsForACinema = async (req: Request, res: Response) => {
     );
     res.status(500).json({
       message: "Unable to find any events, please try again.",
+    });
+  }
+};
+
+export const getAnEvent = async (req: Request, res: Response) => {
+  try {
+    const requestedEventId = req.params.eventId;
+    const obtainedEvent = await Event.findById(requestedEventId);
+    res.status(200).send(obtainedEvent);
+    console.log("Event sent to user.");
+  } catch (error) {
+    console.error(
+      "The following error occured when the requestor tried to access a specifc event:",
+      error
+    );
+    res.status(449).json({
+      message:
+        "Unable to locate the requested cinema. Please try again with a valid event ID.",
     });
   }
 };

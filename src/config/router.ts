@@ -9,6 +9,7 @@ import {
 } from "../controllers/cinemaControllers";
 import {
   deleteAnEvent,
+  getAnEvent,
   getEventsForACinema,
   postAnEvent,
   updateAnEvent,
@@ -56,6 +57,8 @@ router
   .route("event/:eventId/comments")
   .get(getCommentsForEvent)
   .post(secureRoute, postAComment);
+
+router.route("event/:evnetId").get(getAnEvent);
 
 router
   .route("event/:eventId/comments")
