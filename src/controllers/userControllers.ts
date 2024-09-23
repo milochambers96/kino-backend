@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import mongoose from "mongoose";
 import User, { checkPassword, validatePassword } from "../models/user";
+import formatValidationError from "../errorMessages/validation.ts/validation";
 import jwt from "jsonwebtoken";
 
 export const signup = async (req: Request, res: Response) => {
@@ -11,8 +12,9 @@ export const signup = async (req: Request, res: Response) => {
       newUserDetails.passwordConfirmation
     );
     if (!isPasswordAMatch) {
-      return res.status(401).json({
-        message: "The inputted passwords do not match. Please try again.",
+      return res.status(401).send({
+        message: "Passwords do not match",
+        errors: { password: "Does not match password" },
       });
     }
     const username = newUserDetails.username;
@@ -21,8 +23,9 @@ export const signup = async (req: Request, res: Response) => {
     console.log(username, " has been added to the User DB.");
   } catch (error) {
     console.error(error);
-    res.status(400).json({
-      message: "Error signing up user. Please reivew submitted details.",
+    res.status(400).send({
+      message: "There was an error",
+      errors: formatValidationError(error),
     });
   }
 };

@@ -49,7 +49,7 @@ async function seed() {
       "Pink Palace is a lo-fi safe space to engage with queer film history.",
     image:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQzQx9sN4751UUSDWZ-QTTL2RvVC8gNrawFEA&s",
-    recDate: "Weekly, every thursday.",
+    recurringDate: "Weekly, every Thursday.",
     eventLink: "https://www.riocinema.org.uk/pink-palace",
     author: seedUser,
   };
