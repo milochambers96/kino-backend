@@ -30,7 +30,9 @@ export const getEventsForACinema = async (req: Request, res: Response) => {
 export const getAnEvent = async (req: Request, res: Response) => {
   try {
     const requestedEventId = req.params.eventId;
-    const obtainedEvent = await Event.findById(requestedEventId);
+    const obtainedEvent = await Event.findById(requestedEventId)
+      .populate("author", "username")
+      .populate("location", "name address");
 
     if (!obtainedEvent) {
       return res.status(404).json({
