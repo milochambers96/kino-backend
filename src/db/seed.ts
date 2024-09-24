@@ -30,6 +30,7 @@ async function seed() {
     bio: "The Rio is a genuine 1930's art deco picture palace in Dalston Hackney. The Rio is run as a non-proift charity, and London's longest operating community cinema.",
     address: "107 Kingsland High Street, London, E8 2PB",
     area: "East",
+    borough: "Hackney",
     image:
       "https://indy-systems.imgix.net/kb5npisf4jsfyn9xxf7jfyhv7e61?auto=format",
     website: "https://www.riocinema.org.uk/home",

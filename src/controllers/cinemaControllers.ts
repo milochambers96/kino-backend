@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import mongoose from "mongoose";
 import Cinema from "../models/cinema";
+import formatValidationError from "../errorMessages/validation.ts/validation";
 
 export const getAllCinemas = async (req: Request, res: Response) => {
   try {
@@ -55,6 +56,7 @@ export const postACinema = async (req: Request, res: Response) => {
     );
     res.status(400).json({
       message: "Error posting cinema. Please reivew submitted details.",
+      errors: formatValidationError(error),
     });
   }
 };

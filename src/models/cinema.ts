@@ -5,6 +5,7 @@ interface ICinema {
   bio: string;
   address: string;
   area: "North" | "East" | "South" | "West" | "Central";
+  borough: string;
   image: string;
   website: string;
   yearEst: number;
@@ -22,6 +23,7 @@ const cinemaSchema: Schema<ICinema> = new Schema({
     required: true,
     enum: ["North", "East", "South", "West", "Central"],
   },
+  borough: { type: String, required: true },
   image: { type: String, required: true },
   website: { type: String, required: true },
   yearEst: { type: Number },

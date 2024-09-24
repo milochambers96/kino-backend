@@ -14,7 +14,10 @@ export const signup = async (req: Request, res: Response) => {
     if (!isPasswordAMatch) {
       return res.status(401).send({
         message: "Passwords do not match",
-        errors: { password: "Does not match password" },
+        errors: {
+          password: "Passwords do not match. Please try again.",
+          passwordConfirmation: "Passwords do not match. Please try again.",
+        },
       });
     }
     const username = newUserDetails.username;
@@ -35,8 +38,7 @@ export const login = async (req: Request, res: Response) => {
     const incomingEmail = req.body.email;
     const incomingPassword = req.body.password;
     const foundUser = await User.findOne({ email: incomingEmail });
-    const loginFailedMessage =
-      "Login failed. Please check your credentials and try again!";
+    const loginFailedMessage = "Login failed. Please check your credentials.";
     if (!foundUser) {
       console.log("Login failed - no user found");
       return res.status(401).json({
@@ -63,6 +65,7 @@ export const login = async (req: Request, res: Response) => {
       );
       return res.status(200).json({
         message: `Login successful. Hi ${foundUser.username}, welcome back to Kino Connect.`,
+        token,
       });
     } else {
       console.log(
