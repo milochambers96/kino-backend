@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import mongoose from "mongoose";
 import Cinema from "../models/cinema";
 import Event from "../models/events";
+import formatValidationError from "../errorMessages/validation.ts/validation";
 
 export const getEventsForACinema = async (req: Request, res: Response) => {
   try {
@@ -83,8 +84,9 @@ export const postAnEvent = async (req: Request, res: Response) => {
       "The following error occured when the user tried to create a event:",
       error
     );
-    res.status(500).json({
-      message: "Unable to create event, please try again.",
+    res.status(400).json({
+      message: "Unable to create event.",
+      errors: formatValidationError(error),
     });
   }
 };

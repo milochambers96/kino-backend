@@ -5,11 +5,11 @@ interface IEvent {
   location: Types.ObjectId;
   image: string;
   description: string;
-  specificDate: Date;
+  specificStartDate: Date;
+  specificEndDate: Date;
   recurringDate: string;
   eventLink: string;
   author: Types.ObjectId;
-  //   comments: []
 }
 
 const eventSchema: Schema<IEvent> = new Schema(
@@ -18,11 +18,12 @@ const eventSchema: Schema<IEvent> = new Schema(
     location: { type: Schema.Types.ObjectId, ref: "Cinema", required: true },
     image: { type: String },
     description: { type: String, required: true },
-    specificDate: { type: Date },
+    specificStartDate: { type: Date },
+    specificEndDate: { type: Date },
     recurringDate: { type: String },
+
     eventLink: { type: String },
     author: { type: Schema.Types.ObjectId, ref: "User", required: true },
-    //   comments: {type: Array }
   },
   { timestamps: true }
 );
