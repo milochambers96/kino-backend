@@ -94,22 +94,33 @@ export const updateAComment = async (req: Request, res: Response) => {
     const targetCommentId = req.params.commentId;
     const targetComment = await Comment.findById(targetCommentId);
     const targetCommentAuthor = targetComment?.author;
+
     if (req.currentUser._id.equals(targetCommentAuthor)) {
       const updatedInfo = req.body;
+
       const updatedComment = await Comment.findByIdAndUpdate(
         targetCommentId,
         updatedInfo,
         { new: true }
       );
+
+      return res.status(200).json({
+        message: "Comment updated successfully",
+        comment: updatedComment,
+      });
+    } else {
+      return res.status(403).json({
+        message: "You are not authorized to edit this comment",
+      });
     }
   } catch (error) {
     console.error(
-      "The following error occured when the requestor tried to edit a comment:",
+      "The following error occurred when the requestor tried to edit a comment:",
       error
     );
     res.status(500).json({
       message:
-        "An error occured when attempting to update the requested comment. Please try again later.",
+        "An error occurred when attempting to update the requested comment. Please try again later.",
     });
   }
 };
