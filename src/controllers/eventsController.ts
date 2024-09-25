@@ -33,7 +33,7 @@ export const getAnEvent = async (req: Request, res: Response) => {
     const requestedEventId = req.params.eventId;
     const obtainedEvent = await Event.findById(requestedEventId)
       .populate("author", "username")
-      .populate("location", "name address");
+      .populate("location", "name address owner");
 
     if (!obtainedEvent) {
       return res.status(404).json({
@@ -133,7 +133,7 @@ export const updateAnEvent = async (req: Request, res: Response) => {
     } else {
       res.status(403).json({
         message:
-          "Unauthorised request. Only the event author can update its details.",
+          "Unauthorised request. Only the event author of hosting venue can update its details.",
       });
     }
   } catch (error) {
@@ -141,9 +141,9 @@ export const updateAnEvent = async (req: Request, res: Response) => {
       "The following error occured when the requestor tried to update an event in Kino's DB:",
       error
     );
-    res.status(500).json({
-      message:
-        "An error occured when attempting to update the requested event.",
+    res.status(400).json({
+      message: "Unable to create event.",
+      errors: formatValidationError(error),
     });
   }
 };

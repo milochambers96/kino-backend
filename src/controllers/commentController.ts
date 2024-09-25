@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import mongoose from "mongoose";
 import Comment from "../models/comments";
 import Event from "../models/events";
+import formatValidationError from "../errorMessages/validation.ts/validation";
 
 export const getCommentsForEvent = async (req: Request, res: Response) => {
   try {
@@ -12,20 +13,21 @@ export const getCommentsForEvent = async (req: Request, res: Response) => {
       return res.status(404).json({ message: "Event not found" });
     }
 
-    const associatedEventId = obtainedEvent?._id;
+    const associatedEventId = obtainedEvent._id;
     const eventComments = await Comment.find({
       event: associatedEventId,
     })
       .populate("event", "title")
       .populate("author", "username");
+
     res.status(200).json({ eventComments });
     console.log(
-      `The following comments have been posted on ${obtainedEvent?.title} thread:`,
+      `The following comments have been posted on ${obtainedEvent.title} thread:`,
       eventComments
     );
   } catch (error) {
     console.error(
-      `The following error occured when the requestor tried to find an events comments:`,
+      `The following error occurred when the requestor tried to find an event's comments:`,
       error
     );
     res.status(500).json({
@@ -36,7 +38,7 @@ export const getCommentsForEvent = async (req: Request, res: Response) => {
 
 export const postAComment = async (req: Request, res: Response) => {
   try {
-    const requestedEventId = req.params.commentId;
+    const requestedEventId = req.params.eventId;
     const obtainedEvent = await Event.findById(requestedEventId);
     const associatedEventId = obtainedEvent?._id;
 
@@ -59,8 +61,9 @@ export const postAComment = async (req: Request, res: Response) => {
       "The following error occured when the user tried to post a comment:",
       error
     );
-    res.status(500).json({
-      message: "Unable to post commnet, please try again later.",
+    res.status(400).json({
+      message: "Unable to post comment, please try again.",
+      errors: formatValidationError(error),
     });
   }
 };
