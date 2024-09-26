@@ -4,6 +4,10 @@ interface ICinema {
   name: string;
   bio: string;
   address: string;
+  buildingNo: string;
+  street: string;
+  city: "London";
+  postcode: string;
   area: "North" | "East" | "South" | "West" | "Central";
   borough: string;
   image: string;
@@ -18,6 +22,10 @@ const cinemaSchema: Schema<ICinema> = new Schema({
   name: { type: String, required: true, unique: true },
   bio: { type: String, required: true },
   address: { type: String, required: true },
+  buildingNo: { type: String, required: true },
+  street: { type: String, required: true },
+  city: { type: String, required: true, enum: ["London"] },
+  postcode: { type: String, required: true },
   area: {
     type: String,
     required: true,

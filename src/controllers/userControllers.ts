@@ -80,9 +80,9 @@ export const login = async (req: Request, res: Response) => {
       "The following error occured when the requestor tried to log in:",
       error
     );
-    return res.status(500).json({
-      message:
-        "An error occured when attemptingto login the user. Please try again later.",
+    res.status(400).send({
+      message: "There was an error",
+      errors: formatValidationError(error),
     });
   }
 };
