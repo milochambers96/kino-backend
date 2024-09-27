@@ -1,8 +1,12 @@
 import mongoose from "mongoose";
+import dotenv from "dotenv";
+
 import Cinema from "../models/cinema";
 import User from "../models/user";
 import Event from "../models/events";
 import Comment from "../models/comments";
+
+dotenv.config();
 
 const kinoAdmin = {
   username: "KinoConnect",
@@ -11,10 +15,10 @@ const kinoAdmin = {
   role: "Cinema",
 };
 
-const dbURI = process.env.DB_URI || "mongodb://127.0.0.1:27017/kinoconnection";
+const mongoUrl = process.env.MONGO_DB_URL as string;
 
 async function seed() {
-  await mongoose.connect(dbURI);
+  await mongoose.connect(mongoUrl);
   console.log("Connected to the Kino DB");
   console.log("Removing any existing data");
   await Cinema.deleteMany();

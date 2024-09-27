@@ -53,10 +53,12 @@ export const login = async (req: Request, res: Response) => {
       foundUser.password
     );
 
+    const secret = process.env.SECRET as string;
+
     if (isValidPassword) {
       const token = jwt.sign(
         { userId: foundUser._id, email: foundUser.email },
-        process.env.SECRET || "",
+        secret,
         { expiresIn: "30d" }
       );
       console.log(

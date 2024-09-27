@@ -16,7 +16,9 @@ export default function secureRoute(
 
   const token = rawToken.replace("Bearer ", "");
 
-  jwt.verify(token, process.env.SECRET || "", async (error, payload) => {
+  const secret = process.env.SECRET as string;
+
+  jwt.verify(token, secret, async (error, payload) => {
     if (error || !payload) {
       return res.status(401).json({ message: "Unauthorized. Invalid JWT." });
     }

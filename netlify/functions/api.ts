@@ -1,9 +1,10 @@
 import express from "express";
 import cors from "cors";
 import mongoSanitize from "express-mongo-sanitize";
-import { router } from "./config/router";
+import { router } from "../../src/config/router";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import serverless from "serverless-http";
 
 dotenv.config();
 
@@ -13,15 +14,13 @@ app.use(express.json());
 app.use(cors());
 app.use("/api", router);
 
-const mongoUrl = process.env.MONGO_DB_URL as string;
-const PORT = process.env.PORT;
+const dbURI = process.env.DB_URI as string;
 
 async function start() {
-  await mongoose.connect(mongoUrl);
+  await mongoose.connect(dbURI);
   console.log("🎞 " + " " + "Connected to the Kino Connection database 🎞");
-  app.listen(PORT, () => {
-    console.log(`Express API running on http://localhost:${PORT}`);
-  });
 }
 
 start();
+
+export const handler = serverless(app);
