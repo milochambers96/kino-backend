@@ -14,10 +14,10 @@ app.use(express.json());
 app.use(cors());
 app.use("/api", router);
 
-const dbURI = process.env.DB_URI as string;
+const mongoUrl = process.env.MONGO_DB_URL as string;
 
 async function start() {
-  await mongoose.connect(dbURI);
+  await mongoose.connect(mongoUrl);
   console.log("🎞 " + " " + "Connected to the Kino Connection database 🎞");
 }
 
