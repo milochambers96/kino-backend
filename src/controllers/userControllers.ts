@@ -41,8 +41,10 @@ export const login = async (req: Request, res: Response) => {
     const loginFailedMessage = "Login failed. Please check your credentials.";
     if (!foundUser) {
       console.log("Login failed - no user found");
+      const error = loginFailedMessage;
       return res.status(401).json({
         message: loginFailedMessage,
+        errors: formatValidationError(error),
       });
     }
 
@@ -54,7 +56,7 @@ export const login = async (req: Request, res: Response) => {
     if (isValidPassword) {
       const token = jwt.sign(
         { userId: foundUser._id, email: foundUser.email },
-        process.env.SECRET || "development secret",
+        process.env.SECRET || "",
         { expiresIn: "30d" }
       );
       console.log(

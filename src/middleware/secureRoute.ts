@@ -16,29 +16,23 @@ export default function secureRoute(
 
   const token = rawToken.replace("Bearer ", "");
 
-  jwt.verify(
-    token,
-    process.env.SECRET || "development secret",
-    async (error, payload) => {
-      if (error || !payload) {
-        return res.status(401).json({ message: "Unauthorized. Invalid JWT." });
-      }
-      console.log("Valid token! The payload is:", payload);
-
-      interface JWTPayload {
-        userId: string;
-      }
-
-      const jwtPayload = payload as JWTPayload;
-      const userId = jwtPayload.userId;
-      const user = await User.findById(userId);
-      if (!user) {
-        return res
-          .status(401)
-          .json({ message: "User not found. Invalid JWT!" });
-      }
-      req.currentUser = user;
-      next();
+  jwt.verify(token, process.env.SECRET || "", async (error, payload) => {
+    if (error || !payload) {
+      return res.status(401).json({ message: "Unauthorized. Invalid JWT." });
     }
-  );
+    console.log("Valid token! The payload is:", payload);
+
+    interface JWTPayload {
+      userId: string;
+    }
+
+    const jwtPayload = payload as JWTPayload;
+    const userId = jwtPayload.userId;
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(401).json({ message: "User not found. Invalid JWT!" });
+    }
+    req.currentUser = user;
+    next();
+  });
 }
