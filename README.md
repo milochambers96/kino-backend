@@ -4,7 +4,7 @@
 
 Kino Connect is a platform that connects independent cinemas with film enthusiasts, allowing venues to showcase their unique events and engage with their community. This backend API, built with TypeScript, Express, and MongoDB, provides the infrastructure for cinema management, event hosting, and community engagement.
 
-Built over the course of one week as a solo project, it serves as the backend for [Kino Connect](https://kino-connect.netlify.app).
+Built over the course of one week as a solo project, it serves as the backend for the [Kino Connect Frontend](https://github.com/milochambers96/kino-frontend). The live application can be found at [Kino Connect](https://kino-connect.netlify.app).
 
 ## Technologies Used
 
